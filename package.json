@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "name": "compliance-portal",
+  "scripts": {
+    "dev": "npm run dev --prefix frontend",
+    "build": "npm run build --prefix frontend",
+    "test": "npm run test --prefix frontend"
+  }
+}

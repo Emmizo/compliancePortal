@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base typographic defaults aligned with the brand palette. */
+html, body {
+  background-color: #FFFFFF;
+  color: #1A1A1A;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #8B6914;
+}
+
+/* Tighten focus rings for keyboard accessibility, in brand colours only. */
+:focus-visible {
+  outline: 2px solid #8B6914;
+  outline-offset: 2px;
+}

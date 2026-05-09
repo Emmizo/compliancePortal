@@ -1,0 +1,24 @@
+.git
+.gitignore
+.gitattributes
+.idea
+.vscode
+.cursor
+target
+*.iml
+*.log
+.DS_Store
+
+# Frontend has its own Dockerfile / build context.
+frontend/node_modules
+frontend/dist
+frontend/.vite
+
+# Local document storage and IDE cruft we never want baked in.
+var
+agent-transcripts
+HELP.md
+
+# Test reports, dump files
+**/surefire-reports
+**/dump-*
