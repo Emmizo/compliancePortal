@@ -11,6 +11,8 @@ import com.BNR.compliancePortal.exception.UnauthorizedActionException;
 import com.BNR.compliancePortal.realtime.ApplicationChangeEvents;
 import com.BNR.compliancePortal.repository.ApplicationRepository;
 import com.BNR.compliancePortal.repository.UserRepository;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,20 +73,34 @@ public class ApplicationService {
     @Transactional(readOnly = true)
     public List<Application> listForUser(User caller) {
         List<Application> apps = switch (caller.getRole()) {
-            case APPLICANT -> applicationRepository.findAllByApplicant(caller);
-            case REVIEWER -> reviewerDashboardApplications(caller);
-            case APPROVER -> applicationRepository.findAllByStatus(ApplicationStatus.REVIEWED);
-            case ADMIN -> applicationRepository.findAll();
+            case APPLICANT -> applicationRepository.findAllByApplicantOrderByUpdatedAtDescIdDesc(caller);
+            case REVIEWER -> sortApplicationsNewestFirst(reviewerDashboardApplications(caller));
+            case APPROVER -> applicationRepository.findAllByStatusOrderByUpdatedAtDescIdDesc(ApplicationStatus.REVIEWED);
+            case ADMIN -> applicationRepository.findAllByOrderByUpdatedAtDescIdDesc();
         };
         apps.forEach(ApplicationService::warmAssociationsForApiProjection);
         return apps;
     }
 
+    private static List<Application> sortApplicationsNewestFirst(List<Application> apps) {
+        if (apps.size() <= 1) {
+            return apps;
+        }
+        ArrayList<Application> copy = new ArrayList<>(apps);
+        copy.sort(newestFirstApplication());
+        return List.copyOf(copy);
+    }
+
+    private static Comparator<Application> newestFirstApplication() {
+        return Comparator.comparing(Application::getUpdatedAt).reversed()
+            .thenComparing(Application::getId, Comparator.reverseOrder());
+    }
+
     private List<Application> reviewerDashboardApplications(User reviewer) {
         Map<Long, Application> byId = new LinkedHashMap<>();
-        applicationRepository.findAllByStatus(ApplicationStatus.SUBMITTED)
+        applicationRepository.findAllByStatusOrderByUpdatedAtDescIdDesc(ApplicationStatus.SUBMITTED)
             .forEach(a -> byId.put(a.getId(), a));
-        applicationRepository.findAllByAssignedReviewer(reviewer).stream()
+        applicationRepository.findAllByAssignedReviewerOrderByUpdatedAtDescIdDesc(reviewer).stream()
             .filter(a -> {
                 ApplicationStatus s = a.getStatus();
                 return s == ApplicationStatus.UNDER_REVIEW || s == ApplicationStatus.PENDING_ADDITIONAL_INFO;

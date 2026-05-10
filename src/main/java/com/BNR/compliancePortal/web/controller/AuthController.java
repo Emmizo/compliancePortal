@@ -49,4 +49,11 @@ public class AuthController {
             result.expiresInSeconds(),
             AuthenticatedUserResponse.from(result.user())));
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout() {
+        User user = currentUserResolver.requireCurrentUser();
+        authService.recordLogout(user);
+        return ResponseEntity.noContent().build();
+    }
 }

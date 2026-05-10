@@ -1,6 +1,7 @@
 package com.BNR.compliancePortal.config;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +14,7 @@ public class CorsConfig {
 
     @Bean
     public CorsFilter corsFilter(
-            @Value("${app.security.cors.allowed-origins:http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173}")
+            @Value("${app.security.cors.allowed-origins:http://localhost:3000,http://127.0.0.1:3000,http://localhost:3000,http://127.0.0.1:3000}")
                     String allowedOriginsCsv) {
         List<String> origins = List.of(allowedOriginsCsv.split("\\s*,\\s*"));
 

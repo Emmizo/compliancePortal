@@ -23,6 +23,7 @@ public class AuditService {
 
     public static final String ACTION_USER_REGISTERED          = "USER_REGISTERED";
     public static final String ACTION_USER_LOGIN               = "USER_LOGIN";
+    public static final String ACTION_USER_LOGOUT              = "USER_LOGOUT";
     public static final String ACTION_APPLICATION_CREATED      = "APPLICATION_CREATED";
     public static final String ACTION_STATE_TRANSITION         = "APPLICATION_STATE_TRANSITION";
     public static final String ACTION_DOCUMENT_UPLOADED        = "DOCUMENT_UPLOADED";
@@ -79,11 +80,11 @@ public class AuditService {
     }
 
     public List<AuditLog> historyForApplication(Long applicationId) {
-        return auditLogRepository.findAllByApplicationIdOrderByOccurredAtAscIdAsc(applicationId);
+        return auditLogRepository.findAllByApplicationIdOrderByOccurredAtDescIdDesc(applicationId);
     }
 
     public List<AuditLog> historyForUser(Long userId) {
-        return auditLogRepository.findAllByActingUserIdOrderByOccurredAtAscIdAsc(userId);
+        return auditLogRepository.findAllByActingUserIdOrderByOccurredAtDescIdDesc(userId);
     }
 
     @Transactional(readOnly = true)

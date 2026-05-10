@@ -97,7 +97,7 @@ cd frontend && npm run dev    # http://localhost:3000, proxies /api -> localhost
   retry on the next request.
 - **`Bind for 0.0.0.0:3000 failed: port is already allocated`.**  Another
   process is using port 3000 (often `npm run dev` conflicting with the
-  frontend container). Stop one of them, or set `FRONTEND_HOST_PORT=5173`
+  frontend container). Stop one of them, or set `FRONTEND_HOST_PORT=3000`
   (or any free port) in `.env` and re-run.
 - **Schema validation: missing table.**  Means Flyway didn't run. Confirm with
   `docker compose logs backend | grep -i flyway`. A `docker compose down -v`

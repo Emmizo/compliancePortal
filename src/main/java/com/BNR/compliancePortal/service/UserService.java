@@ -6,6 +6,7 @@ import com.BNR.compliancePortal.exception.BusinessRuleViolationException;
 import com.BNR.compliancePortal.exception.ResourceNotFoundException;
 import com.BNR.compliancePortal.repository.UserRepository;
 import java.util.List;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public List<User> listAll() {
-        return userRepository.findAll();
+        return userRepository.findAll(Sort.by(Sort.Order.desc("createdAt"), Sort.Order.desc("id")));
     }
 
     @Transactional

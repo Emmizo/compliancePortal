@@ -62,7 +62,7 @@ services:
       # CORS: in production the frontend nginx and backend share an origin so
       # CORS is unused. We still allow the dev origin for engineers running
       # `npm run dev` against the dockerised backend.
-      APP_SECURITY_CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:8080,http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173}
+      APP_SECURITY_CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:8080,http://localhost:3000,http://127.0.0.1:3000,http://localhost:3000,http://127.0.0.1:3000}
 
       # JVM container tuning
       JAVA_TOOL_OPTIONS: "-XX:MaxRAMPercentage=75 -Duser.timezone=UTC"

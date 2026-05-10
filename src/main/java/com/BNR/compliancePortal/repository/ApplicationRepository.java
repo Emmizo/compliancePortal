@@ -10,9 +10,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
 
-    List<Application> findAllByApplicant(User applicant);
+    List<Application> findAllByApplicantOrderByUpdatedAtDescIdDesc(User applicant);
 
-    List<Application> findAllByAssignedReviewer(User reviewer);
+    List<Application> findAllByAssignedReviewerOrderByUpdatedAtDescIdDesc(User reviewer);
 
-    List<Application> findAllByStatus(ApplicationStatus status);
+    List<Application> findAllByStatusOrderByUpdatedAtDescIdDesc(ApplicationStatus status);
+
+    List<Application> findAllByOrderByUpdatedAtDescIdDesc();
 }

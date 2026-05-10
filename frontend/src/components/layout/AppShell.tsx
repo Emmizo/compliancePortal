@@ -111,8 +111,10 @@ export function AppShell({ children }: AppShellProps) {
                 variant="secondary"
                 className="text-xs sm:text-sm !px-2.5 sm:!px-4 whitespace-nowrap"
                 onClick={() => {
-                  logout();
-                  navigate('/login', { replace: true });
+                  void (async () => {
+                    await logout();
+                    navigate('/login', { replace: true });
+                  })();
                 }}
               >
                 Sign out

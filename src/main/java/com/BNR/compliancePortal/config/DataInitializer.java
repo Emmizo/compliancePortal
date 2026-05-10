@@ -74,7 +74,7 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void ensureSubmittedApplication(User applicant) {
-        boolean alreadySeeded = applicationRepository.findAllByApplicant(applicant).stream()
+        boolean alreadySeeded = applicationRepository.findAllByApplicantOrderByUpdatedAtDescIdDesc(applicant).stream()
             .anyMatch(a -> "Acme Microfinance Ltd".equals(a.getInstitutionName()));
         if (alreadySeeded) {
             return;
@@ -99,7 +99,7 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void ensureReviewedApplication(User applicant, User reviewer) {
-        boolean alreadyReviewed = applicationRepository.findAllByStatus(ApplicationStatus.REVIEWED)
+        boolean alreadyReviewed = applicationRepository.findAllByStatusOrderByUpdatedAtDescIdDesc(ApplicationStatus.REVIEWED)
             .stream()
             .anyMatch(a -> "Beta Commercial Bank Ltd".equals(a.getInstitutionName()));
         if (alreadyReviewed) {

@@ -10,9 +10,9 @@ public interface AuditLogRepository extends Repository<AuditLog, Long>, AuditLog
 
     AuditLog findFirstById(Long id);
 
-    List<AuditLog> findAllByApplicationIdOrderByOccurredAtAscIdAsc(Long applicationId);
+    List<AuditLog> findAllByApplicationIdOrderByOccurredAtDescIdDesc(Long applicationId);
 
-    List<AuditLog> findAllByActingUserIdOrderByOccurredAtAscIdAsc(Long actingUserId);
+    List<AuditLog> findAllByActingUserIdOrderByOccurredAtDescIdDesc(Long actingUserId);
 
     Page<AuditLog> findAllByOrderByOccurredAtDescIdDesc(Pageable pageable);
 

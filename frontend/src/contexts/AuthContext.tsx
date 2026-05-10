@@ -14,7 +14,7 @@ export interface AuthContextValue {
   role: Role | null;
   forbiddenMessage: string | null;
   login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
   clearForbidden: () => void;
   flashForbidden: (message: string) => void;
 }
@@ -32,11 +32,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [forbiddenMessage, setForbiddenMessage] = useState<string | null>(null);
   const initialised = useRef(false);
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    try {
+      await authApi.logout();
+    } catch {
+      // token may already be invalid — still drop client session
+    }
     setAuthToken(null);
     setUser(null);
     setStatus('unauthenticated');
-    // Next sign-in must not hydrate prior tenant rows from TanStack disk cache (especially admin lookups).
     setForbiddenMessage(null);
     licensingPortalQueryLayer.clear();
   }, [licensingPortalQueryLayer]);

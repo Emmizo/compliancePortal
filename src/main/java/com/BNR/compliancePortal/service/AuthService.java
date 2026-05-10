@@ -66,5 +66,11 @@ public class AuthService {
         return new LoginResult(token, jwtService.expirationMinutes() * 60L, user);
     }
 
+    /** Best-effort audit row; client clears JWT afterward so this is the reliable logout marker. */
+    @Transactional
+    public void recordLogout(User user) {
+        auditService.recordUserAction(user, AuditService.ACTION_USER_LOGOUT, null);
+    }
+
     public record LoginResult(String token, long expiresInSeconds, User user) {}
 }
