@@ -174,7 +174,7 @@ Status codes — how I mentally map responses:
 - **422** — state machine or business rule said no.
 - **500** — my bug; client gets a bland message.
 
-No public register. Admins create users via **`POST /api/v1/admin/users`**. Code I grep when I forget: `GlobalExceptionHandler`, `ApiError`, `RestAuthenticationEntryPoint`, `RestAccessDeniedHandler`, `OpenApiConfig`.
+No public register. Admins create users via **`POST /api/v1/admin/users`**. This is where i handle different status: `GlobalExceptionHandler`, `ApiError`, `RestAuthenticationEntryPoint`, `RestAccessDeniedHandler`, `OpenApiConfig`.
 
 ## Seed data
 
