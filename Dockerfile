@@ -6,7 +6,7 @@
 # Stage 2 (runtime): slim JRE only, runs as a non-root user, exposes 8080.
 # ----------------------------------------------------------------------------
 
-FROM eclipse-temurin:25-jdk AS build
+FROM eclipse-temurin:21-jdk AS build
 WORKDIR /workspace
 
 # Warm the local Maven cache from pom.xml first so that a code-only change
@@ -21,7 +21,7 @@ RUN ./mvnw -B -ntp -DskipTests package \
  && cp target/compliancePortal-*.jar /workspace/app.jar
 
 
-FROM eclipse-temurin:25-jre AS runtime
+FROM eclipse-temurin:21-jre AS runtime
 WORKDIR /app
 
 # Non-root runtime user. Document storage volume is owned by this user.

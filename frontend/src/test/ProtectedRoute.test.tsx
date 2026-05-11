@@ -25,7 +25,13 @@ function mockAuthStatus(status: AuthStatus): void {
 
 function renderAt(initialPath: string) {
   return render(
-    <MemoryRouter initialEntries={[initialPath]}>
+    <MemoryRouter
+      initialEntries={[initialPath]}
+      future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+      }}
+    >
       <Routes>
         <Route path="/login" element={<div data-testid="login-page">login</div>} />
         <Route element={<ProtectedRoute />}>
