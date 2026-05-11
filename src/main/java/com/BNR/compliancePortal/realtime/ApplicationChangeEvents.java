@@ -1,7 +1,6 @@
 package com.BNR.compliancePortal.realtime;
 
 import com.BNR.compliancePortal.domain.Application;
-import com.BNR.compliancePortal.domain.ApplicationStatus;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
@@ -14,19 +13,20 @@ public class ApplicationChangeEvents {
         this.publisher = publisher;
     }
 
+    /**
+     * Publishes after every material application change (create, submit, review, decision, …).
+     * Staff topics are all enabled for every status so every connected role invalidates caches:
+     * approvers only subscribe to /topic/approvers/… (they do not receive /user/queue like applicants).
+     */
     public void publish(Application app) {
-        ApplicationStatus status = app.getStatus();
         Long reviewerId = app.getAssignedReviewer() == null ? null : app.getAssignedReviewer().getId();
-        boolean approversTopic = status == ApplicationStatus.REVIEWED
-            || status == ApplicationStatus.APPROVED
-            || status == ApplicationStatus.REJECTED;
         publisher.publishEvent(new ApplicationCommittedNotification(
             app.getId(),
-            status,
+            app.getStatus(),
             app.getApplicant().getId(),
             reviewerId,
             true,
-            approversTopic,
+            true,
             true));
     }
 }

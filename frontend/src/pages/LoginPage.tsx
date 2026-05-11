@@ -72,8 +72,8 @@ export function LoginPage() {
             {...register('password')}
           />
           {serverError ? (
-            <p role="alert" className="text-sm text-ink bg-white border-2 border-brown rounded p-2">
-              <span className="font-bold text-brown">Error:</span> {serverError}
+            <p role="alert" className="text-sm text-error bg-white border-2 border-error rounded p-2 font-semibold">
+              {serverError}
             </p>
           ) : null}
           <Button type="submit" isLoading={isSubmitting} className="w-full">

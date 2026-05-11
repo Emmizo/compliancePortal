@@ -8,7 +8,7 @@
 # Service map:
 #   db        MySQL 8.4 LTS, internal-only on the docker network
 #   backend   Spring Boot fat-jar on :8080  (host port 8088 for direct API testing)
-#   frontend  nginx serving the built SPA on :80, proxies /api to backend
+#   frontend  nginx serving the built SPA on :80, proxies /api and /ws to backend
 #             Host URL: FRONTEND_HOST_PORT (default 3000) -> http://localhost:3000
 #
 #   Do not run `npm run dev` on 3000 at the same time as the frontend container maps 3000:80 unless you remap one of them (port bind conflict).

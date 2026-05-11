@@ -2,12 +2,15 @@ import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { applicationsApi } from '@/api/applications';
 import { describeError } from '@/api/http';
+import { useRealtimeConnection } from '@/contexts/RealtimeConnectionContext';
+import { APPLICATION_LIVE_FALLBACK_POLL_MS } from '@/lib/realtime-fallback';
 import { EmptyState } from '@/components/EmptyState';
 import { ErrorState } from '@/components/ErrorState';
 import { LoadingState } from '@/components/LoadingState';
 import { useAuth } from '@/contexts/AuthContext';
 
 export function ApplicationAuditPage() {
+  const realtimeConnected = useRealtimeConnection();
   const params = useParams<{ id: string }>();
   const applicationId = params.id ? Number.parseInt(params.id, 10) : undefined;
   const { role } = useAuth();
@@ -19,6 +22,7 @@ export function ApplicationAuditPage() {
       return applicationsApi.auditTrail(applicationId);
     },
     enabled: applicationId !== undefined,
+    refetchInterval: realtimeConnected ? false : APPLICATION_LIVE_FALLBACK_POLL_MS,
   });
 
   if (!applicationId || Number.isNaN(applicationId)) {

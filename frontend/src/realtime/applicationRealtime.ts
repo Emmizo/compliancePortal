@@ -9,7 +9,11 @@ function wsBaseUrl(): string {
   return `${proto}//${window.location.host}/ws`;
 }
 
-export function connectApplicationRealtime(role: Role, onEvent: () => void): Client {
+export function connectApplicationRealtime(
+  role: Role,
+  onEvent: () => void,
+  onConnectionChange?: (connected: boolean) => void,
+): Client {
   const token = getAuthToken();
   if (!token) {
     throw new Error('connectApplicationRealtime: no access token');
@@ -25,6 +29,7 @@ export function connectApplicationRealtime(role: Role, onEvent: () => void): Cli
     heartbeatOutgoing: 10_000,
     debug: import.meta.env.DEV ? (m) => console.debug('[stomp]', m) : () => undefined,
     onConnect: () => {
+      onConnectionChange?.(true);
       const bump = (payloadText: string) => {
         try {
           const snapshot = JSON.parse(payloadText) as { applicationId?: number; status?: string };
@@ -44,6 +49,18 @@ export function connectApplicationRealtime(role: Role, onEvent: () => void): Cli
       if (role === 'ADMIN') {
         client.subscribe('/topic/admins/application-events', (m) => bump(m.body));
       }
+    },
+    onDisconnect: () => {
+      onConnectionChange?.(false);
+    },
+    onStompError: () => {
+      onConnectionChange?.(false);
+    },
+    onWebSocketClose: () => {
+      onConnectionChange?.(false);
+    },
+    onWebSocketError: () => {
+      onConnectionChange?.(false);
     },
   });
 

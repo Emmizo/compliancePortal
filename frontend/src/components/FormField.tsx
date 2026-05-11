@@ -15,8 +15,8 @@ function FieldShell({ label, hint, error, children }: FieldShellProps) {
       <span className="text-ink font-semibold">{label}</span>
       <div className="mt-1">{children}</div>
       {error ? (
-        <p className="mt-1 text-brown text-xs font-bold" role="alert">
-          Error: {error}
+        <p className="mt-1 text-error text-xs font-semibold" role="alert">
+          {error}
         </p>
       ) : hint ? (
         <p className="mt-1 text-ink text-xs">{hint}</p>
@@ -44,7 +44,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
         ref={ref}
         className={clsx(
           BASE_INPUT_CLASSES,
-          error ? 'border-brown border-2' : 'border-brown',
+          error ? 'border-error border-2 focus:ring-error focus:border-error' : 'border-brown',
           className,
         )}
         {...rest}
@@ -69,7 +69,7 @@ export const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>
         ref={ref}
         className={clsx(
           BASE_INPUT_CLASSES,
-          error ? 'border-brown border-2' : 'border-brown',
+          error ? 'border-error border-2 focus:ring-error focus:border-error' : 'border-brown',
           className,
         )}
         rows={4}

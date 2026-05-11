@@ -4,6 +4,8 @@ import { auditApi } from '@/api/audit';
 import { applicationsApi } from '@/api/applications';
 import { usersApi } from '@/api/users';
 import { describeError } from '@/api/http';
+import { useRealtimeConnection } from '@/contexts/RealtimeConnectionContext';
+import { APPLICATION_LIVE_FALLBACK_POLL_MS } from '@/lib/realtime-fallback';
 import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
 import { ErrorState } from '@/components/ErrorState';
@@ -25,6 +27,7 @@ function sortedApplications(applications: ApplicationSummary[]): ApplicationSumm
 }
 
 export function AdminAuditPage() {
+  const realtimeConnected = useRealtimeConnection();
   const [mode, setMode] = useState<Mode>('application');
   const [selectedId, setSelectedId] = useState('');
   const [results, setResults] = useState<AuditLogEntry[] | null>(null);
@@ -38,6 +41,7 @@ export function AdminAuditPage() {
   const applicationsQuery = useQuery({
     queryKey: ['applications'],
     queryFn: () => applicationsApi.list(),
+    refetchInterval: realtimeConnected ? false : APPLICATION_LIVE_FALLBACK_POLL_MS,
   });
 
   const userById = useMemo(() => {
