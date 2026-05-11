@@ -237,9 +237,6 @@ docker run --rm \
   sh -lc 'npm ci && npm test'
 ```
 
-After a backend container run, **`target/`** may be owned by **root** on Linux; remove or `chown` if that gets in the way.
-
-**Manual / integration checks** against the real stack: start Compose as in [Docker Compose](#docker-compose-what-i-use-day-to-day), then use the UI at http://localhost:3000 or the [smoke-test `curl`](#docker-compose-what-i-use-day-to-day) against http://localhost:8088 — that exercises MySQL + Flyway + the running app, not the JUnit suite.
 
 Things I didn’t build but would reach for on a longer contract:
 
