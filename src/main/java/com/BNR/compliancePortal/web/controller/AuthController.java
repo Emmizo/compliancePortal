@@ -6,9 +6,7 @@ import com.BNR.compliancePortal.service.AuthService;
 import com.BNR.compliancePortal.web.dto.AuthDtos.AuthenticatedUserResponse;
 import com.BNR.compliancePortal.web.dto.AuthDtos.LoginRequest;
 import com.BNR.compliancePortal.web.dto.AuthDtos.LoginResponse;
-import com.BNR.compliancePortal.web.dto.AuthDtos.RegisterRequest;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,12 +30,6 @@ public class AuthController {
     public ResponseEntity<AuthenticatedUserResponse> me() {
         User user = currentUserResolver.requireCurrentUser();
         return ResponseEntity.ok(AuthenticatedUserResponse.from(user));
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<AuthenticatedUserResponse> register(@Valid @RequestBody RegisterRequest payload) {
-        User created = authService.registerApplicant(payload.email(), payload.fullName(), payload.password());
-        return ResponseEntity.status(HttpStatus.CREATED).body(AuthenticatedUserResponse.from(created));
     }
 
     @PostMapping("/login")

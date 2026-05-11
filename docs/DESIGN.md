@@ -8,7 +8,7 @@ This document explains **architecture**, **data**, **workflow**, **roles**, and 
 
 ### 1.1 System context
 
-The product is an **internal-style** web portal: a **React** single-page application talks to a **Spring Boot** API over HTTPS (or plain HTTP in local dev). The API uses **MySQL** for authoritative state and a **local filesystem directory** for document blobs. **Flyway** owns the relational schema; **JWT** carries authentication; **RBAC** is enforced on every mutating path on the server.
+The product is an **internal-style** web portal: a **React** single-page application talks to a **Spring Boot** API over HTTPS (or plain HTTP in local dev). The API uses **MySQL** for authoritative state and a **local filesystem directory** for document blobs. **Flyway** owns the relational schema; **JWT** carries authentication; **RBAC** is enforced on every mutating path on the server. The browser also opens a **WebSocket** to the same host for **STOMP** messages so application lists and details can refresh in near real time (`/ws`, proxied like `/api` in production).
 
 ```mermaid
 flowchart LR
@@ -16,21 +16,25 @@ flowchart LR
     Browser[Browser SPA]
   end
   subgraph edge [Optional edge]
-    Nginx[nginx reverse proxy]
+    Nginx[Nginx reverse proxy]
   end
   subgraph backend [Spring Boot]
-    API[REST controllers]
+    API[REST /api]
+    WS[STOMP /ws realtime]
     SVC[Services + state machine]
-    SEC[Security filters]
+    SEC[JWT security filters]
   end
   subgraph data [Persistence]
     DB[(MySQL)]
-    FS[Document storage root]
+    FS[Document storage]
   end
   Browser --> Nginx
   Nginx --> API
-  Browser --> API
-  SEC --> API
+  Nginx -.-> WS
+  Browser -. direct .-> API
+  Browser <-->|live updates| WS
+  WS --> SVC
+  SEC -. inbound filter chain .-> API
   API --> SVC
   SVC --> DB
   SVC --> FS

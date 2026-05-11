@@ -4,7 +4,6 @@ import com.BNR.compliancePortal.domain.Role;
 import com.BNR.compliancePortal.domain.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 public final class AuthDtos {
 
@@ -13,12 +12,6 @@ public final class AuthDtos {
     public record LoginRequest(
         @NotBlank @Email String email,
         @NotBlank String password
-    ) {}
-
-    public record RegisterRequest(
-        @NotBlank @Email String email,
-        @NotBlank String fullName,
-        @NotBlank @Size(min = 8, max = 128) String password
     ) {}
 
     public record AuthenticatedUserResponse(

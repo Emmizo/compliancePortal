@@ -98,12 +98,6 @@ export interface LoginResponse {
   user: User;
 }
 
-export interface RegisterRequest {
-  email: string;
-  fullName: string;
-  password: string;
-}
-
 export interface CreateApplicationRequest {
   institutionName: string;
   licenseType: string;

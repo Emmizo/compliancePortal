@@ -12,7 +12,7 @@ docker compose up --build
 - **UI (Docker nginx):** http://localhost:3000 (`FRONTEND_HOST_PORT`; matches Vite’s default dev port — only run one of Docker UI vs `npm run dev` at a time, or remap a port.)
 - **API (direct):** http://localhost:8088
 - **OpenAPI 3.1 JSON:** http://localhost:3000/v3/api-docs (same origin as the UI; nginx proxies to the backend)
-- **Swagger UI:** http://localhost:3000/swagger-ui.html (use **Authorize** and paste `Bearer <token>` from `POST /api/v1/auth/login`)
+- **Swagger UI:** http://localhost:3000/swagger-ui.html — use the **Servers** dropdown so requests target **:3000**, **:8088**, or **:8080** (never bare `http://localhost` on port **80**, which nothing serves by default). **Authorize:** paste `Bearer <token>` from `POST /api/v1/auth/login`.
 
 Hitting the backend directly (e.g. curl/Postman against the mapped port): same paths on **http://localhost:8088** (`/v3/api-docs`, `/swagger-ui.html`, `/api/v1/...`). Local `./mvnw spring-boot:run` defaults to **http://localhost:8080**.
 
@@ -29,6 +29,7 @@ Frontend scripts and stack: [frontend/README.md](frontend/README.md).
 
 ## HTTP API (contract for reviewers)
 
+- **User accounts:** There is **no public self-registration**. Only **`ROLE_ADMIN`** may create users (`POST /api/v1/admin/users`). When `SEED_ENABLED=true`, the stack also provisions demo users (see **Seed data** below).
 - **Shape:** JSON under `/api/v1/...`. Successful responses are resource DTOs; failures use a single envelope `ApiError` (`status`, `error`, `message`, optional `details`, `timestamp`) from `GlobalExceptionHandler` and the security entry-point handlers.
 - **No stack traces:** Spring Boot’s error page is configured with `server.error.include-stacktrace=never` (and related flags off in `application.properties`). Handlers log full exceptions server-side only; clients never see traces.
 
